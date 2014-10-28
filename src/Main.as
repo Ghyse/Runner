@@ -4,6 +4,7 @@ package
 	import flash.events.Event;
 	
 	/**
+	 * HOLA!
 	 * ...
 	 * @author Giselle Higa
 	 */
