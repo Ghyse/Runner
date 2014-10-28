@@ -19,6 +19,7 @@ package items
 		private var buffer:BitmapData;
 		private var bmp1:BitmapData
 		private var numeroTiritaActual:int;
+		private var cycles:int=0;
 		public var scrollSpeed:int;
 		
 		
@@ -68,10 +69,17 @@ package items
 		
 		public function hacerNoche():void {
 		 //bmp1.applyFilter
-			var colorChange:ColorTransform = new ColorTransform(0.2, 0.2, 0.5, 0.9)
-			bmp1.colorTransform(bmp1.rect, colorChange)
-			
+			var colorChange:ColorTransform
+			if (cycles < 60) {
+				colorChange = new ColorTransform(1, 1, 1, 1, -1, -1, -1)
+				bmp1.colorTransform(bmp1.rect, colorChange)
 			}
+			if (cycles > 60 && cycles <= 100) {
+				colorChange = new ColorTransform(1, 1, 1, 1, -1, -1, -1)
+				bmp1.colorTransform(bmp1.rect, colorChange)
+			}
+			cycles++
+		}
 			
 		
 	}
