@@ -53,7 +53,7 @@ package
 		public var listaPowerup:Array
 		
 	
-		
+	
 		public var camera:Rectangle
 		
 		
