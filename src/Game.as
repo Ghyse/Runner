@@ -120,8 +120,8 @@ package
 			elements.update()
 			camera.x = elements.player1.x - 150
 			if (elements.player1.x >= 2000) {
-				fondo.cambiarFondo(obstacles.getBitmapData("bg2"))
-				//fondo.hacerNoche()
+				//fondo.cambiarFondo(obstacles.getBitmapData("bg2"))
+				fondo.hacerNoche()
 			}
 			
 			if (elements.player1.onFloor  && charView.currentLabel != "run") {
