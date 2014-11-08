@@ -1,5 +1,6 @@
 package
 {
+	import com.adobe.serialization.json.JSON;
 	import flash.display.MovieClip;
 	import flash.net.IDynamicPropertyWriter;
 	import items.Pantalla;
@@ -41,6 +42,7 @@ package
 	public class Game extends Sprite
 	{
 		private var fondo:ScrollingImage;
+		private var fondo2:ScrollingImage
 		public var anchoLevel:int
 		public var gravedad:int
 		private var obstacles:GeneradordePlataforma;
@@ -79,8 +81,8 @@ package
 		{
 			anchoLevel = 18000
 			gravedad = 10
-			obstacles = new GeneradordePlataforma();
-			listaElementos = [new SpeedBoost(750,150), new Energy(500,200),new Shield(800, 100),new Obstacle("f", 1, 1, 750, 0), new Obstacle("v", 1, 1, 2000, 100), new Obstacle("g", 1, 1, 1200, 150),new Platform("t", 4, 1, 450,150), new Platform("t", 2, 1, 1000, 150), new Platform("t", 8, 1, 2100, 150)]
+			obstacles = new GeneradordePlataforma(); //"x":10  "lista"
+			listaElementos = [new SpeedBoost(750,150), new Energy(500,250),new Shield(800, 100), new Obstacle("v", 1, 1, 2000, 100), new Obstacle("g", 1, 1, 1200, 150), new Platform("t",15,1,-180	,-10),new Platform("t", 8, 1, 1000, 150), new Platform("t", 8, 1, 2100, 150)]
 			listaElementosView = new Dictionary();
 			camera = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight)
 			elements = new World(gravedad, anchoLevel)
@@ -88,11 +90,7 @@ package
 			for each (var item:WorldObject in listaElementos) {
 				elements.addWorldObeject(item);
 			}
-			
-			fondo = new ScrollingImage(elements.player1.velocityX)
-			addChild(fondo)
-			myPantalla = new Pantalla(camera.width, camera.height)
-			addChild(myPantalla)
+		
 			
 			obstacles.addEventListener(GeneradordePlataforma.TODO_LISTO, objectLoadComplete)
 		
@@ -106,6 +104,12 @@ package
 		{
 			
 			loadCompleteObstacle = true
+			fondo = new ScrollingImage(elements.player1.velocityX,obstacles.getBitmapData("bg"))
+			fondo2 = new ScrollingImage(elements.player1.velocityX - 5, obstacles.getBitmapData("bg2"))
+			addChild(fondo2)
+			addChild(fondo)
+			myPantalla = new Pantalla(camera.width, camera.height)
+			addChild(myPantalla)
 			crearTipoClaseObjeto(elements._listaElements, listaElementosView)
 			
 			charView = obstacles.crearMC("testPlayer.swf")
@@ -117,10 +121,14 @@ package
 		private function correrJuego(e:Event):void
 		{
 			myPantalla.clean();
-			elements.update()
+			//fondo.clean();
+			elements.update();
+			fondo.update()
+			fondo2.update()
 			camera.x = elements.player1.x - 150
 			if (elements.player1.x >= 2000) {
 				//fondo.cambiarFondo(obstacles.getBitmapData("bg2"))
+				fondo2.hacerNoche()
 				fondo.hacerNoche()
 			}
 			

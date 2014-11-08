@@ -1,5 +1,6 @@
 package items 
 {
+	import com.adobe.serialization.json.JSON;
 	import flash.accessibility.AccessibilityImplementation;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -10,8 +11,10 @@ package items
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.globalization.StringTools;
+	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
+	import objects.WorldObject;
 	/**
 	 * ...
 	 * @author Giselle Alejandra Higa
@@ -20,24 +23,37 @@ package items
 	{
 	
 		
-		private var plataformas:Array = ["t1", "t2", "t3", "f1", "g1", "v1", "shield1","char","e1","speed1","bg2"];
+		private var plataformas:Array = ["t1", "t2", "t3", "f1", "g1", "v1", "shield1", "e1", "speed1", "bg2", "bg"];
+		
 		public var listaMC:Array = ["testPlayer"]
 		public var loader:Loader 
-		
-		var mcCargado:Boolean;
+		public var urlLoader:URLLoader
+		public var listaItems:Array
+		private var mcCargado:Boolean;
+		private var txtCargado:Boolean;
 		private var fondoData:BitmapData;
 		private var imagenes:BitmapLoader;
 		private var mc:MovieClip;
 		public var cargado:Boolean;
 		static public const TODO_LISTO:String = "todoListo";
+		private var listaISuma:int
 		
 		public function GeneradordePlataforma() 
 		{
+			listaItems = new Array()
+			
+			//MOVIE CLICP FILE
 			loader = new Loader() 
 			var urlRequest:URLRequest = new URLRequest("asset/testPlayer.swf")
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, seCargoMC)
 			loader.load(urlRequest)
 			
+			//TXT FILE
+			var urlRequest2:URLRequest = new URLRequest("asset/itemsPosition.txt")
+			urlLoader = new URLLoader()
+			urlLoader.addEventListener(Event.COMPLETE, seCargoTxt)
+			urlLoader.load(urlRequest2);
+		
 			
 			imagenes = new BitmapLoader(plataformas)
 			
@@ -48,10 +64,42 @@ package items
 			
 		}
 		
+		private function seCargoTxt(e:Event):void 
+		{
+			e.currentTarget.removeEventListener(Event.COMPLETE, seCargoTxt)
+			txtCargado = true
+			var fileContent:String = urlLoader.data
+			var object:Array = JSON.decode(fileContent)
+			
+			for (var i:int = 0; i < object.length; i++) {
+				var worldObjectDefinition:Object = object[i]
+				trace ("EL CONTENIDO DE WORLDOBJECTDEFINITIO ES " + worldObjectDefinition )
+				listaItems[i] = worldObjectDefinition["o"];
+				
+				switch (worldObjectDefinition["o"]) 
+				{
+					case "Platform":
+					
+						
+					break;
+					
+					
+					
+				}
+				
+				trace (listaItems)
+				
+				
+				
+			}
+			trace (object)
+			trace ("se cargo el TXT")
+		}
+		
 		private function completarCarga(e:Event):void 
 		{
 			cargado = true
-			if (mcCargado){ 
+			if (mcCargado && txtCargado){ 
 			trace ("TODO OK CON GENERADOR PLATAFORMA")
 			dispatchEvent(new Event(TODO_LISTO))
 			}

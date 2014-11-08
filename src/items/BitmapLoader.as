@@ -71,6 +71,12 @@ package items
 		}
 		
 		public function getFile (nombre:String):BitmapData {
+			if (contadorCarga != cargaTotal) {
+				throw new Error ( "no se termino la carga de imagenes") // accion + razon para mostrar
+			}	
+			if (!listaBitmapData[nombre]) {
+				throw new Error ( nombre + " no esta en la lista de imagenes")
+			}
 			return listaBitmapData[nombre]
 		}
 		

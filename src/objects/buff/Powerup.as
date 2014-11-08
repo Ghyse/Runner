@@ -8,7 +8,7 @@ package objects.buff
 	 */
 	public class Powerup extends WorldObject
 	{
-		private const SIZE_POWER = 260
+		private const SIZE_POWER = 100
 		
 		
 		public function Powerup(typeObstacle:String, x:int,y:int) 
