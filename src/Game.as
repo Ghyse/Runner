@@ -91,12 +91,7 @@ package
 				elements.addWorldObeject(item);
 			}
 		
-			
 			obstacles.addEventListener(GeneradordePlataforma.TODO_LISTO, objectLoadComplete)
-		
-			
-			
-		
 		
 		}
 		
