@@ -1,9 +1,11 @@
 package
 {
 	import com.adobe.serialization.json.JSON;
+	import config.GameConfig;
 	import flash.display.MovieClip;
 	import flash.net.IDynamicPropertyWriter;
-	import items.Pantalla;
+	import views.GeneradorDeVista;
+	import views.Pantalla;
 	import objects.buff.Energy;
 	import objects.buff.Powerup;
 	import adobe.utils.CustomActions;
@@ -20,8 +22,7 @@ package
 	import flash.net.URLRequest;
 	import flash.text.engine.BreakOpportunity;
 	import flash.utils.Dictionary;
-	import items.Character;
-	import items.GeneradordePlataforma;
+	import views.Character;
 	import objects.buff.Powerup;
 	import objects.buff.Energy;
 	import objects.buff.Shield;
@@ -31,7 +32,7 @@ package
 	import objects.Obstacle;
 	import objects.Platform;
 	
-	import items.ScrollingImage;
+	import views.ScrollingImage;
 	import objects.Player;
 	import objects.WorldObject;
 	
@@ -41,11 +42,15 @@ package
 	 */
 	public class Game extends Sprite
 	{
+		public var gameReady:Boolean
+		public static const GAME_CARGADO:String = "game_cargado"
 		private var fondo:ScrollingImage;
 		private var fondo2:ScrollingImage
+		private var fondo1:ScrollingImage
+		
 		public var anchoLevel:int
 		public var gravedad:int
-		private var obstacles:GeneradordePlataforma;
+		private var itemsVista:GeneradorDeVista;
 		
 		private var tipTile:String = "t";
 		private var myPantalla:Pantalla;
@@ -53,7 +58,7 @@ package
 		public var listaObstacle:Array
 		public var listaPlatform:Array
 		public var listaPowerup:Array
-		
+		public var levelDesign:GameConfig
 	
 	
 		public var camera:Rectangle
@@ -79,10 +84,21 @@ package
 		
 		public function Game()
 		{
+			levelDesign= new GameConfig("asset/itemsPosition.txt")
+			//aaaaatrace ("lista de  objetos game config" + testing.listaObjects)
+			
+			levelDesign.addEventListener(GameConfig.TXT_CARGADO, txtComplete)
+			
+			
+		
+		}
+		
+		private function txtComplete (e:Event):void {
+			
 			anchoLevel = 18000
 			gravedad = 10
-			obstacles = new GeneradordePlataforma(); //"x":10  "lista"
-			listaElementos = [new SpeedBoost(750,150), new Energy(500,250),new Shield(800, 100), new Obstacle("v", 1, 1, 2000, 100), new Obstacle("g", 1, 1, 1200, 150), new Platform("t",15,1,-180	,-10),new Platform("t", 8, 1, 1000, 150), new Platform("t", 8, 1, 2100, 150)]
+			itemsVista = new GeneradorDeVista(); //"x":10  "lista"
+			listaElementos = levelDesign.listaObjects
 			listaElementosView = new Dictionary();
 			camera = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight)
 			elements = new World(gravedad, anchoLevel)
@@ -90,24 +106,29 @@ package
 			for each (var item:WorldObject in listaElementos) {
 				elements.addWorldObeject(item);
 			}
-		
-			obstacles.addEventListener(GeneradordePlataforma.TODO_LISTO, objectLoadComplete)
-		
+			
+			itemsVista.addEventListener(GeneradorDeVista.TODO_LISTO, objectLoadComplete)
+			
 		}
 		
 		private function objectLoadComplete(e:Event):void
 		{
 			
+			gameReady = true
 			loadCompleteObstacle = true
-			fondo = new ScrollingImage(elements.player1.velocityX,obstacles.getBitmapData("bg"))
-			fondo2 = new ScrollingImage(elements.player1.velocityX - 5, obstacles.getBitmapData("bg2"))
+			fondo = new ScrollingImage(elements.player1.velocityX,itemsVista.getBitmapData("bg"))
+			fondo2 = new ScrollingImage(elements.player1.velocityX - 9, itemsVista.getBitmapData("bg2"))
+			fondo1 = new ScrollingImage(elements.player1.velocityX - 3, itemsVista.getBitmapData("bg1"))
 			addChild(fondo2)
+			addChild(fondo1)
 			addChild(fondo)
 			myPantalla = new Pantalla(camera.width, camera.height)
 			addChild(myPantalla)
 			crearTipoClaseObjeto(elements._listaElements, listaElementosView)
+			charView = itemsVista.crearMC("testPlayer.swf")
 			
-			charView = obstacles.crearMC("testPlayer.swf")
+			
+			dispatchEvent(new Event(GAME_CARGADO));
 			this.addEventListener(Event.ENTER_FRAME, correrJuego)
 			stage.addEventListener(KeyboardEvent.KEY_UP, select)
 		
@@ -119,12 +140,13 @@ package
 			//fondo.clean();
 			elements.update();
 			fondo.update()
+			fondo1.update()
 			fondo2.update()
 			camera.x = elements.player1.x - 150
 			if (elements.player1.x >= 2000) {
-				//fondo.cambiarFondo(obstacles.getBitmapData("bg2"))
-				fondo2.hacerNoche()
-				fondo.hacerNoche()
+				//fondo.cambiarFondo(itemsVista.getBitmapData("bg2"))
+				//fondo2.hacerNoche()
+				//fondo.hacerNoche()
 			}
 			
 			if (elements.player1.onFloor  && charView.currentLabel != "run") {
@@ -163,9 +185,11 @@ package
 						elements.player1.jumpAmount++
 						charView.gotoAndPlay("jump")
 						trace("presionaste saltar")
-						
+						trace ("cantidad de saltos: " + elements.player1.jumpAmount)
 					}
-					else if (elements.player1.velocityY == 0)
+					
+					
+					else if (elements.player1.onFloor)
 					{
 						elements.player1.jumpAmount = 0
 					}
@@ -179,7 +203,7 @@ package
 		{
 			for each (var object:WorldObject in listaRectangulo)
 			{
-				bibliotecaObjeto[object] = obstacles.crearVista(object.type, object.objWidth)
+				bibliotecaObjeto[object] = itemsVista.crearVista(object.type, object.objWidth)
 			}
 			
 			
@@ -203,17 +227,9 @@ package
 			position.y = (camera.y + camera.height) - (modelo.y + modelo.height)
 			myPantalla.drawBitmap(position,vista,layer)
 		}
-		
-		public function onLoadComplete(e:Event):void
-		{
-			this.removeEventListener(Event.COMPLETE, onLoadComplete)
-		}
-		
-		
-		
-		
+
 		public function finish (e:Event):void {
-			this..removeEventListener(Event.ENTER_FRAME, correrJuego)
+			this.removeEventListener(Event.ENTER_FRAME, correrJuego)
 		}
 		
 	}

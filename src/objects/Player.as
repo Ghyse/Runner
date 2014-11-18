@@ -26,6 +26,7 @@ package objects
 		
 		public function jump():void {
 			velocityY = 50	
+		
 			this.onFloor = false
 			
 		}

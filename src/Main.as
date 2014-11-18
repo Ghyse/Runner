@@ -2,6 +2,7 @@ package
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	/**
 	 * chau!
@@ -10,6 +11,7 @@ package
 	 */
 	public class Main extends Sprite 
 	{
+		private var game:Game;
 		
 		public function Main():void 
 		{
@@ -21,8 +23,23 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
+			stage.addChild(Director.goTo("menu"))
+			
+			//game = new Game ()
+			//addChild(game)
+			//addChild(menu)
+			
 		}
 		
+	
+		
+		/*private function mostrar(e:Event):void 
+		{
+			stage.addChild(menu)
+			trace (menu.cargado)
+		}*/
+		
+	
 	}
 	
 }
