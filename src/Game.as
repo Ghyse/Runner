@@ -40,7 +40,7 @@ package
 	 * ...
 	 * @author Giselle Higa
 	 */
-	public class Game extends Sprite
+	public class Game extends Section
 	{
 		public var gameReady:Boolean
 		public static const GAME_CARGADO:String = "game_cargado"
@@ -100,7 +100,7 @@ package
 			itemsVista = new GeneradorDeVista(); //"x":10  "lista"
 			listaElementos = levelDesign.listaObjects
 			listaElementosView = new Dictionary();
-			camera = new Rectangle(0, 0, stage.stageWidth, stage.stageHeight)
+			camera = new Rectangle(0, 0, Director.stage.stageWidth, Director.stage.stageHeight)
 			elements = new World(gravedad, anchoLevel)
 			
 			for each (var item:WorldObject in listaElementos) {
@@ -128,7 +128,7 @@ package
 			charView = itemsVista.crearMC("testPlayer.swf")
 			
 			
-			dispatchEvent(new Event(GAME_CARGADO));
+			dispatchEvent(new Event(Event.COMPLETE));
 			this.addEventListener(Event.ENTER_FRAME, correrJuego)
 			stage.addEventListener(KeyboardEvent.KEY_UP, select)
 		
@@ -230,6 +230,10 @@ package
 
 		public function finish (e:Event):void {
 			this.removeEventListener(Event.ENTER_FRAME, correrJuego)
+		}
+		
+		override public function beginLoad():void {
+			
 		}
 		
 	}

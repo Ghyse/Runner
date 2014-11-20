@@ -3,6 +3,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.URLLoader;
 	
 	/**
 	 * chau!
@@ -23,12 +24,13 @@ package
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
-			stage.addChild(Director.goTo("menu"))
+			Director.stage = this.stage
+			Director.goTo("menu")
 			
 			//game = new Game ()
 			//addChild(game)
 			//addChild(menu)
-			
+		 var url:URLLoader	
 		}
 		
 	

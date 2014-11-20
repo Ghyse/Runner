@@ -9,7 +9,7 @@ package
 	 * ...
 	 * @author ...
 	 */
-	public class Menu extends Sprite
+	public class Menu extends Section
 	{
 		public static const MENU_CARGADO:String = "menu_cargado"
 		private var objetos:Array = ["menuBg"] 
@@ -21,8 +21,7 @@ package
 		public function Menu():void 
 		{
 			
-			imagenes = new BitmapLoader(objetos);
-			imagenes.addEventListener(BitmapLoader.TODO_CARGADO, complete)
+			
 			
 		}
 		
@@ -33,23 +32,30 @@ package
 			
 			if (cargado) {
 				addChild(fondo)
-				dispatchEvent(new Event(MENU_CARGADO))
+				dispatchEvent(new Event(Event.COMPLETE))
 				trace ("menu imagen cargado")
 				
-				addEventListener(MouseEvent.CLICK, cambiar)
+				this.addEventListener(MouseEvent.CLICK, jugar)
 			}
 			
 			
 		}
 		
-		private function cambiar(e:MouseEvent):void 
+		private function jugar(e:MouseEvent):void 
 		{
-			//stage.removeChild(Director.goTo("menu"))
-			stage.addChild(Director.goTo("game"));
+			this.removeEventListener(MouseEvent.CLICK, jugar)
+			Director.goTo("game")
+			
 		}
 		
+		override public function beginLoad():void {
+			imagenes = new BitmapLoader(objetos);
+			imagenes.addEventListener(BitmapLoader.TODO_CARGADO, complete)
+		}
 	
+		
 	
+		
 	
 		
 	}

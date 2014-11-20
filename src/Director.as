@@ -1,7 +1,10 @@
 package  
+
+
 {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	/**
@@ -15,7 +18,8 @@ package
 	 */
 	public class Director extends EventDispatcher
 	{
-
+		public static var stage:Stage
+		public static var section:DisplayObject
 		
 		public function Director() 
 		{
@@ -23,37 +27,36 @@ package
 		}
 		
 		
-		public static function goTo(seccion:String):Sprite {
+		public static function goTo(seccion:String): void {
+			if (section) {
+				section.removeEventListener(Event.COMPLETE, ready);
+				stage.removeChild(section)
+				section = null
+			}
 			
-			var object:Sprite
 			switch (seccion) 
 			{
 				case "menu":
-					var menu:Menu = new Menu()	
-					menu.addEventListener(Menu.MENU_CARGADO, ready)
-					object = menu
+					section = new Menu()	
 				break;
 			
 				case "game":
-					var game:Game = new Game()
-					game.addEventListener(Game.GAME_CARGADO, ready)
-					object  = game
-				
+					section = new Game()
 				break;
-				
-				
-				
 			}
+			Section(section).beginLoad()
+			section.addEventListener(Event.COMPLETE, ready)
 			
-			return object
 			
 			
 		}
 		
 		static private function ready(e:Event):void 
 		{
-			
+			stage.addChild(section)
 		}
+		
+		
 		
 	
 	}

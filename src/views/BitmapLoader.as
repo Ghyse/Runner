@@ -11,7 +11,7 @@ package views {
 	 * ...
 	 * @author Giselle Higa
 	 */
-	public class BitmapLoader extends Sprite
+	public class BitmapLoader extends Section
 	{
 		public static const TODO_CARGADO:String = "todo_cargado"  // static para qe la constante sea para toda la clase
 		private var contadorCarga:int
