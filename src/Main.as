@@ -26,21 +26,10 @@ package
 			// entry point
 			Director.stage = this.stage
 			Director.goTo("menu")
-			
-			//game = new Game ()
-			//addChild(game)
-			//addChild(menu)
-		 var url:URLLoader	
+		
 		}
 		
 	
-		
-		/*private function mostrar(e:Event):void 
-		{
-			stage.addChild(menu)
-			trace (menu.cargado)
-		}*/
-		
 	
 	}
 	

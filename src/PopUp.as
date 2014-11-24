@@ -1,31 +1,35 @@
 package  
 {
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import views.BitmapLoader;
 	/**
 	 * ...
-	 * @author ...
+	 * @author qtie
 	 */
-	public class Section extends Sprite implements Cargador
+	public class PopUp extends Sprite implements Cargador
 	{
 		
-		public function Section() 
+		
+		public function PopUp() 
 		{
-			
+	
 		}
 		
-		
-		
-		public function destroy():void {
+		public function destroy ():void {
+			
 			
 		}
-		
 		/* INTERFACE Cargador */
 		
 		public function beginLoad():void 
 		{
 			
 		}
+		
+		
 		
 		public function get loadComplete():Boolean 
 		{

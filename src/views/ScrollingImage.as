@@ -14,7 +14,8 @@ package views {
 	 * ...
 	 * @author Santiago.J.Elizalde
 	 */
-	public class ScrollingImage extends Sprite {
+	public class ScrollingImage extends Sprite 
+	{
 		private var buffer:BitmapData;
 		private var bmp1:BitmapData
 		private var numeroTiritaActual:int;

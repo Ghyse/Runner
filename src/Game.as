@@ -87,7 +87,7 @@ package
 			levelDesign= new GameConfig("asset/itemsPosition.txt")
 			//aaaaatrace ("lista de  objetos game config" + testing.listaObjects)
 			
-			levelDesign.addEventListener(GameConfig.TXT_CARGADO, txtComplete)
+			
 			
 			
 		
@@ -98,6 +98,7 @@ package
 			anchoLevel = 18000
 			gravedad = 10
 			itemsVista = new GeneradorDeVista(); //"x":10  "lista"
+			itemsVista.beginLoad()
 			listaElementos = levelDesign.listaObjects
 			listaElementosView = new Dictionary();
 			camera = new Rectangle(0, 0, Director.stage.stageWidth, Director.stage.stageHeight)
@@ -156,10 +157,13 @@ package
 			if (elements.isFinish) {
 				this.removeEventListener(Event.ENTER_FRAME, correrJuego)
 				fondo.scrollSpeed = 0
+				Director.openPopUp("gameover")
+				
 			}
 			if (elements.player1.dead) {
 				this.removeEventListener(Event.ENTER_FRAME, correrJuego)
 				fondo.scrollSpeed = 0
+				Director.openPopUp("gameover")
 			}
 		
 			
@@ -228,13 +232,23 @@ package
 			myPantalla.drawBitmap(position,vista,layer)
 		}
 
-		public function finish (e:Event):void {
+		/*public function finish (e:Event):void {
 			this.removeEventListener(Event.ENTER_FRAME, correrJuego)
-		}
+		}*/
 		
 		override public function beginLoad():void {
+			levelDesign.beginLoad();
+			levelDesign.addEventListener(GameConfig.TXT_CARGADO, txtComplete)
+			
 			
 		}
+		
+		override public function destroy ():void {
+			levelDesign = null
+			this.removeEventListener(Event.ENTER_FRAME,correrJuego)
+			
+		}
+		
 		
 	}
 	

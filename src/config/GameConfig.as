@@ -32,7 +32,7 @@ package config
 		 
 	 
 	 
-	 public class GameConfig extends EventDispatcher
+	 public class GameConfig extends EventDispatcher implements Cargador
 	{
 		private var urlLoader:URLLoader;
 		private var txtCargado:Boolean;
@@ -43,18 +43,19 @@ package config
 		private var object:Array;
 		private var urlRequest:URLRequest;
 		private var cargatotal:int
+		private var _ruta:String;
 		
 		public function GameConfig(ruta:String) 
 		{
 			trace ("principio")
 			 listaObjects = new Array()
+			_ruta = ruta 
 			
 			//TXT FILE
-			urlRequest = new URLRequest(ruta)
+			urlRequest = new URLRequest(_ruta)
 			urlLoader = new URLLoader(urlRequest)
-			urlLoader.addEventListener(Event.COMPLETE, seCargoTxt)
+		
 			urlLoader.load(urlRequest);
-			
 			
 		}
 		
@@ -104,20 +105,21 @@ package config
 				
 			}
 			
-			if (carga == cargatotal) {
+			if (loadComplete) {
 					dispatchEvent(new Event(TXT_CARGADO))
 			}
 			
-		
-			
-			/*if (txtCargado){
-				
-				dispatchEvent(new Event(TXT_CARGADO))
-			}*/
-			
 		}
 		
+		public function beginLoad ():void {
+			urlLoader.addEventListener(Event.COMPLETE, seCargoTxt)
+		}	
 		
+		public function get loadComplete ():Boolean {
+			return carga == cargatotal
+		}
+		
+			
 		
 		
 	}

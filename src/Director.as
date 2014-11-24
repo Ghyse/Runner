@@ -19,7 +19,9 @@ package
 	public class Director extends EventDispatcher
 	{
 		public static var stage:Stage
-		public static var section:DisplayObject
+		public static var section:Section
+		public static var _popup:PopUp
+		
 		
 		public function Director() 
 		{
@@ -30,6 +32,7 @@ package
 		public static function goTo(seccion:String): void {
 			if (section) {
 				section.removeEventListener(Event.COMPLETE, ready);
+				section.destroy()
 				stage.removeChild(section)
 				section = null
 			}
@@ -44,7 +47,7 @@ package
 					section = new Game()
 				break;
 			}
-			Section(section).beginLoad()
+			section.beginLoad()
 			section.addEventListener(Event.COMPLETE, ready)
 			
 			
@@ -56,7 +59,30 @@ package
 			stage.addChild(section)
 		}
 		
+		public static function openPopUp (popup:String):void {
+			if (_popup) {
+				_popup.removeEventListener(Event.COMPLETE, show)
+				_popup.destroy()
+				stage.removeChild(_popup)
+			}
+			
+			
+			switch (popup)
+			{
+				case "gameover":
+					_popup = new GameOver()
+				break;
+			}
+			
+			_popup.beginLoad();
+			_popup.addEventListener(Event.COMPLETE, show)
+			
+		}
 		
+		static private function show(e:Event):void 
+		{
+			stage.addChild(_popup)
+		}
 		
 	
 	}

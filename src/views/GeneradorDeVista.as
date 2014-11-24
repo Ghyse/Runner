@@ -18,7 +18,7 @@ package views {
 	 * ...
 	 * @author Giselle Alejandra Higa
 	 */
-	public class GeneradorDeVista extends Sprite
+	public class GeneradorDeVista extends Sprite implements Cargador
 	{
 	
 		
@@ -39,18 +39,14 @@ package views {
 		{
 			listaItems = new Array()
 			
-			//MOVIE CLICP FILE
-			loader = new Loader() 
-			var urlRequest:URLRequest = new URLRequest("asset/testPlayer.swf")
-			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, seCargoMC)
-			loader.load(urlRequest)
+			
 			
 			
 			
 			imagenes = new BitmapLoader(plataformas)
 			
 			
-			imagenes.addEventListener(BitmapLoader.TODO_CARGADO, completarCarga)
+		
 			
 	
 			
@@ -134,7 +130,25 @@ package views {
 			
 		}
 		
+		public function beginLoad ():void {
+			//MOVIE CLICP FILE
+			loader = new Loader() 
+			var urlRequest:URLRequest = new URLRequest("asset/testPlayer.swf")
+			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, seCargoMC)
+			loader.load(urlRequest)
+			
+			imagenes.beginLoad()
+			
+			imagenes.addEventListener(BitmapLoader.TODO_CARGADO, completarCarga)
+			
+		}
 		
+		/* INTERFACE Cargador */
+		
+		public function get loadComplete():Boolean 
+		{
+			return true
+		}
 		
 		
 		

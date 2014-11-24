@@ -11,7 +11,7 @@ package views {
 	 * ...
 	 * @author Giselle Higa
 	 */
-	public class BitmapLoader extends Section
+	public class BitmapLoader extends Sprite implements Cargador
 	{
 		public static const TODO_CARGADO:String = "todo_cargado"  // static para qe la constante sea para toda la clase
 		private var contadorCarga:int
@@ -20,15 +20,17 @@ package views {
 		private var listaLoader:Dictionary
 		private var nombre:String
 		private var listaName:Array
+		private var listaCargar:Array;
 		
 		
 		public function BitmapLoader(lista:Array) 
 		{
+			listaCargar = lista
 			listaName = new Array()
 			listaLoader = new Dictionary()
 			listaBitmapData = new Dictionary()
 			cargaTotal = lista.length
-			loadFiles(lista)
+			
 		
 		}
 		
@@ -90,7 +92,18 @@ package views {
 		}
 		
 		
+		public function beginLoad ():void {
+			
+			loadFiles(listaCargar)
+			
+		}
 		
+		/* INTERFACE Cargador */
+		
+		public function get loadComplete():Boolean 
+		{
+			return true
+		}
 		
 		
 		

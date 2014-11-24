@@ -4,6 +4,7 @@ package
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import tools.button;
 	import views.BitmapLoader;
 	/**
 	 * ...
@@ -16,6 +17,7 @@ package
 		private var imagenes:BitmapLoader
 		private var fondo:Bitmap
 		public var cargado:Boolean
+		private var btn_game:button
 		
 		
 		public function Menu():void 
@@ -30,8 +32,9 @@ package
 			cargado = true
 			fondo = new Bitmap(imagenes.getFile("menuBg"))
 			
-			if (cargado) {
+			if (cargado && btn_game.cargado) {
 				addChild(fondo)
+				addChild(btn_game)
 				dispatchEvent(new Event(Event.COMPLETE))
 				trace ("menu imagen cargado")
 				
@@ -44,16 +47,25 @@ package
 		private function jugar(e:MouseEvent):void 
 		{
 			this.removeEventListener(MouseEvent.CLICK, jugar)
-			Director.goTo("game")
+		
+		
 			
 		}
 		
 		override public function beginLoad():void {
+			btn_game = new button("game")
+			btn_game.beginLoad()
 			imagenes = new BitmapLoader(objetos);
+			imagenes.beginLoad()
+			btn_game.addEventListener(Event.COMPLETE, complete)
 			imagenes.addEventListener(BitmapLoader.TODO_CARGADO, complete)
 		}
 	
+		override public function destroy():void {
+			removeChild(btn_game)
+			imagenes = null	
 		
+		}
 	
 		
 	
